@@ -40,7 +40,6 @@ const AppLayout = ({ children }) => {
           </Link>
         </Menu.Item>
       <Switch onChange={changeTheme} /> 
-
       </Menu>
       <Row gutter={8}>
         <Col xs={24} md={6}>
