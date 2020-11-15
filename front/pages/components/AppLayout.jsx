@@ -1,12 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Link from "next/link";
-import { Menu, Input, Row, Col, Switch } from "antd";
-import UserProfile from "../components/UserProfile";
-import LoginForm from "../components/LoginForm";
-import styled, { createGlobalStyle } from "styled-components";
-
-import { useSelector } from "react-redux";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Link from 'next/link';
+import { Menu, Input, Row, Col, Switch } from 'antd';
+import styled, { createGlobalStyle } from 'styled-components';
+import { useSelector } from 'react-redux';
+import UserProfile from './UserProfile';
+import LoginForm from './LoginForm';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
@@ -29,10 +28,10 @@ const Global = createGlobalStyle`
 `;
 
 const AppLayout = ({ children }) => {
-  const { isLoggedIn } = useSelector((state) => state.user);
-  const [theme, setTheme] = React.useState("light");
+  const { me } = useSelector((state) => state.user);
+  const [theme, setTheme] = React.useState('light');
   const changeTheme = (value) => {
-    setTheme(value ? "dark" : "light");
+    setTheme(value ? 'dark' : 'light');
   };
 
   return (
@@ -55,18 +54,18 @@ const AppLayout = ({ children }) => {
         <Menu.Item key="4">
           <Link href="/signup">
             <a>회원가입</a>
-          </Link>  
+          </Link>
         </Menu.Item>
         <Menu.Item key="5">
-    
-        <Switch style={{ float: 'right', margin: '10px' }} onChange={changeTheme}></Switch>          
+          <Switch
+            style={{ float: 'right', margin: '10px' }}
+            onChange={changeTheme}
+          />
         </Menu.Item>
-        
-     
       </Menu>
       <MainRow gutter={8}>
         <Col xs={24} md={6}>
-          {isLoggedIn ? <UserProfile /> : <LoginForm />}
+          {me ? <UserProfile /> : <LoginForm />}
         </Col>
         <Col xs={24} md={12}>
           {children}

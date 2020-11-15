@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import wrapper from "../store/configureStore";
-import "antd/dist/antd.css";
-import { TwitterOutlined } from "@ant-design/icons";
-import styled from "styled-components";
-import withReduxSaga from 'next-redux-saga'
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
+import 'antd/dist/antd.css';
+import { TwitterOutlined } from '@ant-design/icons';
+import styled from 'styled-components';
+import withReduxSaga from 'next-redux-saga';
+import wrapper from '../store/configureStore';
 
 const TwitterHeadIcon = styled(TwitterOutlined)`
   color: #00acee;
@@ -24,24 +24,21 @@ const Header = styled.header`
   
 `;
 
-
-const NodeBird = ({ Component }) => {
-  return (
-    <>
-      <Head>
-        <meta charSet="utf-8" />
-        <title>NodeBird</title>
-      </Head>
-      <Header>
+const NodeBird = ({ Component }) => (
+  <>
+    <Head>
+      <meta charSet="utf-8" />
+      <title>NodeBird</title>
+    </Head>
+    <Header>
       <HeaderTextFont>
         <TwitterHeadIcon />
         NodeBird
       </HeaderTextFont>
-      </Header>
-      <Component />
-    </>
-  );
-};
+    </Header>
+    <Component />
+  </>
+);
 
 NodeBird.propTypes = {
   Component: PropTypes.elementType.isRequired,

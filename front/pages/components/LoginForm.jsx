@@ -1,21 +1,14 @@
-import React, { useCallback } from "react";
-import { Form, Input, Button } from "antd";
-import Link from "next/link";
-import styled from "styled-components";
-import useInput from "../hooks/useInput";
-import { useDispatch } from "react-redux";
-import { loginAction } from "../../reducers/user";
+import React, { useCallback } from 'react';
+import { Form, Input, Button } from 'antd';
+import Link from 'next/link';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
-// useCallback 함수 캐싱
-// useMemo 값을 캐싱
+import useInput from '../hooks/useInput';
+import { LOG_IN_REQUEST } from '../../reducers/user';
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
-`;
-
-const ButtonStyle = styled(Button)`
-  
-
 `;
 
 const FormWrapper = styled(Form)`
@@ -24,43 +17,39 @@ const FormWrapper = styled(Form)`
 
 const LoginForm = () => {
   const dispatch = useDispatch();
-  const [id, onChangeId] = useInput('');
+  const { logInLoading } = useSelector((state) => state.user);
+  const [email, onChangeEmail] = useInput('');
   const [password, onChangePassword] = useInput('');
-  
+
   const onSubmitForm = useCallback(() => {
-    console.log(id, password);
-    dispatch(loginAction({id, password}))
-  }, [id, password]);
+    console.log(email, password);
+    dispatch({
+      type: LOG_IN_REQUEST,
+      data: { email, password },
+    });
+  }, [email, password]);
 
   return (
     <FormWrapper onFinish={onSubmitForm}>
       <div>
-        <label htmlFor="user-id">아이디</label>
-      </div>
-      <div>
-        <Input name="user-id" value={id} onChange={onChangeId} required></Input>
+        <label htmlFor="user-email">이메일</label>
+        <br />
+        <Input name="user-email" type="email" value={email} onChange={onChangeEmail} required />
       </div>
       <div>
         <label htmlFor="user-password">비밀번호</label>
-      </div>
-      <div>
+        <br />
         <Input
           name="user-password"
           type="password"
           value={password}
           onChange={onChangePassword}
           required
-        ></Input>
+        />
       </div>
       <ButtonWrapper>
-        <ButtonStyle type="primary" htmlType="submit" loading={false}>
-          로그인
-        </ButtonStyle>
-        <Link href="/signup">
-          <a>
-            <ButtonStyle type="primary" style={{ float: 'right' }}>회원가입</ButtonStyle>
-          </a>
-        </Link>
+        <Button type="primary" htmlType="submit" loading={logInLoading}>로그인</Button>
+        <Link href="/signup"><a><Button>회원가입</Button></a></Link>
       </ButtonWrapper>
     </FormWrapper>
   );

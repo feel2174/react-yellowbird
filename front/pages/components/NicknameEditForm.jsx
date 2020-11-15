@@ -1,6 +1,6 @@
-import React from "react";
-import { Form, Input } from "antd";
-import styled from "styled-components";
+import React from 'react';
+import { Form, Input } from 'antd';
+import styled from 'styled-components';
 
 const FormWrapper = styled(Form)`
   margin-bottom: 20px;
