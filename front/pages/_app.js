@@ -5,6 +5,7 @@ import wrapper from "../store/configureStore";
 import "antd/dist/antd.css";
 import { TwitterOutlined } from "@ant-design/icons";
 import styled from "styled-components";
+import withReduxSaga from 'next-redux-saga'
 
 const TwitterHeadIcon = styled(TwitterOutlined)`
   color: #00acee;
@@ -45,4 +46,4 @@ const NodeBird = ({ Component }) => {
 NodeBird.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
-export default wrapper.withRedux(NodeBird);
+export default wrapper.withRedux(withReduxSaga(NodeBird));

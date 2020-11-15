@@ -4,7 +4,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import useInput from "../hooks/useInput";
 import { useDispatch } from "react-redux";
-import { loginAction } from "../../reducers";
+import { loginAction } from "../../reducers/user";
 
 // useCallback 함수 캐싱
 // useMemo 값을 캐싱
@@ -14,7 +14,8 @@ const ButtonWrapper = styled.div`
 `;
 
 const ButtonStyle = styled(Button)`
-  margin-right: 10px;
+  
+
 `;
 
 const FormWrapper = styled(Form)`
@@ -24,7 +25,7 @@ const FormWrapper = styled(Form)`
 const LoginForm = () => {
   const dispatch = useDispatch();
   const [id, onChangeId] = useInput('');
-  const [password, onChagnePassword] = useInput('');
+  const [password, onChangePassword] = useInput('');
   
   const onSubmitForm = useCallback(() => {
     console.log(id, password);
@@ -47,7 +48,7 @@ const LoginForm = () => {
           name="user-password"
           type="password"
           value={password}
-          onChange={onChagnePassword}
+          onChange={onChangePassword}
           required
         ></Input>
       </div>
@@ -57,7 +58,7 @@ const LoginForm = () => {
         </ButtonStyle>
         <Link href="/signup">
           <a>
-            <ButtonStyle type="primary">회원가입</ButtonStyle>
+            <ButtonStyle type="primary" style={{ float: 'right' }}>회원가입</ButtonStyle>
           </a>
         </Link>
       </ButtonWrapper>
