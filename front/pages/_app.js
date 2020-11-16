@@ -20,8 +20,6 @@ const HeaderTextFont = styled.div`
 `;
 const Header = styled.header`
   background-color: yellow;
-  
-  
 `;
 
 const NodeBird = ({ Component }) => (
