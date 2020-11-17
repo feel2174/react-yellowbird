@@ -57,31 +57,30 @@ export const initialState = {
   addCommentError: null,
 };
 
-export const generateDummyPost = (number) =>
-  Array(number)
-    .fill()
-    .map(() => ({
+export const generateDummyPost = (number) => Array(number)
+  .fill()
+  .map(() => ({
+    id: shortId.generate(),
+    User: {
       id: shortId.generate(),
-      User: {
-        id: shortId.generate(),
-        nickname: faker.name.findName(),
+      nickname: faker.name.findName(),
+    },
+    content: faker.lorem.paragraph(),
+    Images: [
+      {
+        src: faker.image.imageUrl(),
       },
-      content: faker.lorem.paragraph(),
-      Images: [
-        {
-          src: faker.image.imageUrl(),
+    ],
+    Comments: [
+      {
+        User: {
+          id: shortId.generate(),
+          nickname: faker.name.findName(),
         },
-      ],
-      Comments: [
-        {
-          User: {
-            id: shortId.generate(),
-            nickname: faker.name.findName(),
-          },
-          content: faker.lorem.sentence(),
-        },
-      ],
-    }));
+        content: faker.lorem.sentence(),
+      },
+    ],
+  }));
 
 export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
 export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
@@ -128,6 +127,7 @@ const dummyComment = (data) => ({
     nickname: "devzucca",
   },
 });
+
 // 이전 상태를 액션을 통해 다음상태로 만들어내는 함수 (불변성!!)
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
@@ -191,7 +191,6 @@ const reducer = (state = initialState, action) => {
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
         break;
-
       default:
         break;
     }

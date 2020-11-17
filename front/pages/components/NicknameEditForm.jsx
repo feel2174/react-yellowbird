@@ -8,7 +8,7 @@ const FormWrapper = styled(Form)`
   margin: 20px 20px 20px 20px;
 `;
 
-const NicknameEditForm = (props) => {
+const NicknameEditForm = () => {
   return (
     <FormWrapper>
       <Input.Search addonBefore="닉네임" enterButton="수정" />

@@ -4,11 +4,12 @@ import Link from 'next/link';
 import { Menu, Input, Row, Col, Switch } from 'antd';
 import styled, { createGlobalStyle } from 'styled-components';
 import { useSelector } from 'react-redux';
-import UserProfile from './UserProfile';
-import LoginForm from './LoginForm';
+import UserProfile from './Authentication/UserProfile';
+import LoginForm from './Authentication/LoginForm';
 
 const SearchInput = styled(Input.Search)`
   vertical-align: middle;
+  margin-top: 5px;
 `;
 const MainRow = styled(Row)`
   justify-content: center;
@@ -56,7 +57,7 @@ const AppLayout = ({ children }) => {
             <a>회원가입</a>
           </Link>
         </Menu.Item>
-        <Menu.Item key="5" style={{ float: 'right', margin: '10px' }}>
+        <Menu.Item key="5" style={{ float: 'right' }}>
           <Switch
             onChange={changeTheme}
           />
@@ -74,6 +75,7 @@ const AppLayout = ({ children }) => {
             href="https://zucca.tistory.com"
             target="_blank"
             rel="noreferrer noopener"
+            style={{ padding: '20px' }}
           >
             Made by devZucca
           </a>

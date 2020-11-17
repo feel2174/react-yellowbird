@@ -26,7 +26,7 @@ export const initialState = {
 
 const dummyUser = (data) => ({
   ...data,
-  nickname: "제로초",
+  nickname: "devZucca",
   id: 1,
   Posts: [{ id: 1 }],
   Followings: [{ nickname: "df" }, { nickname: "df" }, { nickname: "df" }],
@@ -95,7 +95,9 @@ const reducer = (state = initialState, action) => {
       case UNFOLLOW_SUCCESS:
         draft.unfollowLoading = false;
         draft.unfollowDone = true;
-        draft.me.Followings = draft.me.Followings.filter((v) => v.id !== action.data);
+        draft.me.Followings = draft.me.Followings.filter(
+          (v) => v.id !== action.data,
+        );
         break;
       case UNFOLLOW_FAILURE:
         draft.unfollowLoading = false;
@@ -122,13 +124,11 @@ const reducer = (state = initialState, action) => {
         draft.logOutError = null;
         break;
       case LOG_OUT_SUCCESS:
-        console.log(action);
         draft.logOutLoading = false;
         draft.logOutDone = true;
         draft.me = null;
         break;
       case LOG_OUT_FAILURE:
-        console.log(action);
         draft.logOutLoading = false;
         draft.logOutError = action.error;
         break;
@@ -146,7 +146,6 @@ const reducer = (state = initialState, action) => {
         draft.signUpError = action.error;
         break;
       case CHANGE_NICKNAME_REQUEST:
-        console.log(action);
         draft.changeNicknameLoading = true;
         draft.changeNicknameDone = false;
         draft.changeNicknameError = null;

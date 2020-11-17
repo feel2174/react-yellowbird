@@ -30,7 +30,7 @@ const NodeBird = ({ Component }) => (
     </Head>
     <Header>
       <HeaderTextFont>
-        <TwitterHeadIcon />
+        <TwitterOutlined style={{ color: '#00acee', fontSize: '48px', padding: '10px' }} />
         NodeBird
       </HeaderTextFont>
     </Header>

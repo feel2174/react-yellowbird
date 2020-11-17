@@ -8,7 +8,6 @@ function addPostAPI(data) {
   return axios.post("/api/post", data);
 }
 function* addPost(action) {
-  console.log('addPost');
   try {
     yield delay(1000);
     //const result = yield call(addPostAPI, action.data);
@@ -36,7 +35,6 @@ function removePostAPI(data) {
   return axios.delete("/api/post", data);
 }
 function* removePost(action) {
-  console.log('removePost');
   try {
     yield delay(1000);
     //const result = yield call(addPostAPI, action.data);
@@ -53,7 +51,6 @@ function* removePost(action) {
       data: action.data,
     });
   } catch (err) {
-    console.error(err);
     yield put({
       type: REMOVE_POST_FAILURE,
       error: err.response.data,
