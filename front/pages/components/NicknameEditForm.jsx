@@ -3,9 +3,9 @@ import { Form, Input } from 'antd';
 import styled from 'styled-components';
 
 const FormWrapper = styled(Form)`
-  margin-bottom: 20px;
+  
   border: 1px soild #d9d9d9;
-  margin: 20px 0 20px 0;
+  margin: 20px 20px 20px 20px;
 `;
 
 const NicknameEditForm = (props) => {

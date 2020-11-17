@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { Menu, Input, Row, Col, Switch } from 'antd';
@@ -29,7 +29,7 @@ const Global = createGlobalStyle`
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
-  const [theme, setTheme] = React.useState('light');
+  const [theme, setTheme] = useState('light');
   const changeTheme = (value) => {
     setTheme(value ? 'dark' : 'light');
   };
@@ -56,9 +56,8 @@ const AppLayout = ({ children }) => {
             <a>회원가입</a>
           </Link>
         </Menu.Item>
-        <Menu.Item key="5">
+        <Menu.Item key="5" style={{ float: 'right', margin: '10px' }}>
           <Switch
-            style={{ float: 'right', margin: '10px' }}
             onChange={changeTheme}
           />
         </Menu.Item>

@@ -1,6 +1,6 @@
 import shortId from "shortid";
 import produce from "immer";
-import faker, { fake } from "faker";
+import faker from "faker";
 
 export const initialState = {
   mainPosts: [
@@ -42,6 +42,10 @@ export const initialState = {
     },
   ],
   imagePaths: [],
+  hasMorePost: true,
+  loadPostsLoading: false,
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false,
   addPostDone: false,
   addPostError: null,
@@ -52,8 +56,9 @@ export const initialState = {
   addCommentDone: false,
   addCommentError: null,
 };
-initialState.mainPosts = initialState.mainPosts.concat(
-  Array(20)
+
+export const generateDummyPost = (number) =>
+  Array(number)
     .fill()
     .map(() => ({
       id: shortId.generate(),
@@ -62,18 +67,25 @@ initialState.mainPosts = initialState.mainPosts.concat(
         nickname: faker.name.findName(),
       },
       content: faker.lorem.paragraph(),
-      Images: [{
-        src: faker.image.imageUrl(),
-      }],
-      Comments: [{
-        User: {
-          id: shortId.generate(),
-          nickname: faker.name.findName(),
+      Images: [
+        {
+          src: faker.image.imageUrl(),
         },
-        content: faker.lorem.sentence(),
-      }],
-    })),
-);
+      ],
+      Comments: [
+        {
+          User: {
+            id: shortId.generate(),
+            nickname: faker.name.findName(),
+          },
+          content: faker.lorem.sentence(),
+        },
+      ],
+    }));
+
+export const LOAD_POST_REQUEST = "LOAD_POST_REQUEST";
+export const LOAD_POST_SUCCESS = "LOAD_POST_SUCCESS";
+export const LOAD_POST_FAILURE = "LOAD_POST_FAILURE";
 
 export const ADD_POST_REQUEST = "ADD_POST_REQUEST";
 export const ADD_POST_SUCCESS = "ADD_POST_SUCCESS";
@@ -120,6 +132,21 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case LOAD_POST_REQUEST:
+        draft.loadPostsLoading = true;
+        draft.loadPostsDone = false;
+        draft.loadPostsError = null;
+        break;
+      case LOAD_POST_SUCCESS:
+        draft.hasMorePost = draft.mainPosts.length < 50;
+        draft.mainPosts = action.data.concat(draft.mainPosts);
+        draft.loadPostsLoading = false;
+        draft.loadPostsDone = true;
+        break;
+      case LOAD_POST_FAILURE:
+        draft.loadPostsLoading = false;
+        draft.loadPostsError = action.error;
+        break;
       case ADD_POST_REQUEST:
         draft.addPostLoading = true;
         draft.addPostDone = false;
