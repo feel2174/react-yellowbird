@@ -1,21 +1,32 @@
-import { all, fork, put, delay, takeLatest, call } from 'redux-saga/effects';
-import axios from 'axios';
-import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT_SUCCESS,
-  LOG_OUT_FAILURE, LOG_IN_REQUEST, LOG_OUT_REQUEST,
-  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE,
-  UNFOLLOW_REQUEST, FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE,
-  UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
-} from '../reducers/user';
+import { all, fork, put, delay, takeLatest, call } from "redux-saga/effects";
+import axios from "axios";
+import {
+  LOG_IN_SUCCESS,
+  LOG_IN_FAILURE,
+  LOG_OUT_SUCCESS,
+  LOG_OUT_FAILURE,
+  LOG_IN_REQUEST,
+  LOG_OUT_REQUEST,
+  SIGN_UP_REQUEST,
+  SIGN_UP_SUCCESS,
+  SIGN_UP_FAILURE,
+  UNFOLLOW_REQUEST,
+  FOLLOW_REQUEST,
+  FOLLOW_SUCCESS,
+  FOLLOW_FAILURE,
+  UNFOLLOW_SUCCESS,
+  UNFOLLOW_FAILURE,
+} from "../reducers/user";
 
 function logInAPI(data) {
-  return axios.post('/user/login', data);
+  return axios.post("/user/login", data);
 }
 
 function* logIn(action) {
   try {
-    console.log('saga start');
+    console.log("saga start");
     const result = yield call(logInAPI, action.data);
-    console.log('log');
+    console.log("log");
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -30,15 +41,13 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post('/user/logout');
+  return axios.post("/user/logout");
 }
 function* logOut() {
   try {
-    yield delay(1000);
-    //  const result = yield call(logOutAPI);
+    yield call(logOutAPI);
     yield put({
       type: LOG_OUT_SUCCESS,
-      //     data: result.data,
     });
   } catch (err) {
     yield put({
@@ -49,7 +58,7 @@ function* logOut() {
 }
 
 function signUpAPI(data) {
-  return axios.post('/user', data);
+  return axios.post("/user", data);
 }
 function* signUp(action) {
   try {
@@ -68,7 +77,7 @@ function* signUp(action) {
 }
 
 function followAPI() {
-  return axios.post('/api/follow');
+  return axios.post("/api/follow");
 }
 function* follow(action) {
   try {
@@ -87,9 +96,8 @@ function* follow(action) {
   }
 }
 
-
 function unfollowAPI() {
-  return axios.post('/api/unfollow');
+  return axios.post("/api/unfollow");
 }
 function* unfollow(action) {
   try {
@@ -108,11 +116,8 @@ function* unfollow(action) {
   }
 }
 
-
-
-
 function* watchLogin() {
-  console.log('watchLogin');
+  console.log("watchLogin");
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
@@ -131,7 +136,6 @@ function* watchFollow() {
 function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_REQUEST, unfollow);
 }
-
 
 export default function* userSaga() {
   yield all([
