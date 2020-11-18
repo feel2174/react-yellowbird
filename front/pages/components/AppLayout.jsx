@@ -67,7 +67,7 @@ const AppLayout = ({ children }) => {
         <Col xs={24} md={6}>
           {me ? <UserProfile /> : <LoginForm />}
         </Col>
-        <Col xs={24} md={12}>
+        <Col xs={24} md={12} xxl={12} style={{ paddingLeft: '12rem', paddingRight: '12rem' }}>
           {children}
         </Col>
         <Col xs={24} md={6}>
@@ -84,7 +84,6 @@ const AppLayout = ({ children }) => {
     </div>
   );
 };
-
 AppLayout.propTypes = {
   children: PropTypes.node.isRequired,
 };

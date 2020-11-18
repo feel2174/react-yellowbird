@@ -1,7 +1,8 @@
-import React, { useCallback } from 'react';
-import { Card, Avatar, Button } from 'antd';
-import { useDispatch, useSelector } from 'react-redux';
-import { logoutRequestAction } from '../../../reducers/user';
+import React, { useCallback } from "react";
+import { Card, Avatar, Button } from "antd";
+import { useDispatch, useSelector } from "react-redux";
+import Link from "next/link";
+import { logoutRequestAction } from "../../../reducers/user";
 
 const UserProfile = () => {
   const dispatch = useDispatch();
@@ -13,21 +14,35 @@ const UserProfile = () => {
     <Card
       actions={[
         <div key="twit">
-          트윗
-          <br />{me.Posts.length}
+          <Link href="/">
+            <a>트윗</a>
+          </Link>
+          <br />
+          {me.Posts.length}
         </div>,
         <div key="follwings">
-          팔로잉
-          <br />{me.Followings.length}
+          <Link href="/profile">
+            <a>팔로잉</a>
+          </Link>
+          <br />
+          {me.Followings.length}
         </div>,
         <div key="followers">
-          팔로워
-          <br />{me.Followers.length}
+          <Link href="/profile">
+            <a>팔로워</a>
+          </Link>
+          <br />
+          {me.Followers.length}
         </div>,
       ]}
     >
-      <Card.Meta avatar={<Avatar>{me.nickname[0]}</Avatar>} title={me.nickname} />
-      <Button onClick={onLogOut} shape="round" loading={logOutLoading}>로그아웃</Button>
+      <Card.Meta
+        avatar={<Avatar>{me.nickname[0]}</Avatar>}
+        title={me.nickname}
+      />
+      <Button onClick={onLogOut} shape="round" loading={logOutLoading}>
+        로그아웃
+      </Button>
     </Card>
   );
 };

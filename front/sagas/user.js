@@ -1,23 +1,24 @@
-import { all, fork, put, delay, takeLatest } from 'redux-saga/effects';
+import { all, fork, put, delay, takeLatest, call } from 'redux-saga/effects';
 import axios from 'axios';
 import { LOG_IN_SUCCESS, LOG_IN_FAILURE, LOG_OUT_SUCCESS,
   LOG_OUT_FAILURE, LOG_IN_REQUEST, LOG_OUT_REQUEST,
-  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE, UNFOLLOW_REQUEST, FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
+  SIGN_UP_REQUEST, SIGN_UP_SUCCESS, SIGN_UP_FAILURE,
+  UNFOLLOW_REQUEST, FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE,
+  UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
 } from '../reducers/user';
 
 function logInAPI(data) {
-  return axios.post('/api/login', data); 
+  return axios.post('/user/login', data);
 }
 
 function* logIn(action) {
   try {
     console.log('saga start');
-    // const result = yield call(logInAPI, action.data);
-    yield delay(1000);
+    const result = yield call(logInAPI, action.data);
     console.log('log');
     yield put({
       type: LOG_IN_SUCCESS,
-      data: action.data,
+      data: result.data,
     });
   } catch (err) {
     console.error(err);
@@ -29,7 +30,7 @@ function* logIn(action) {
 }
 
 function logOutAPI() {
-  return axios.post('/api/logout');
+  return axios.post('/user/logout');
 }
 function* logOut() {
   try {
@@ -47,14 +48,13 @@ function* logOut() {
   }
 }
 
-function signUpAPI() {
-  return axios.post('/api/signup');
+function signUpAPI(data) {
+  return axios.post('/user', data);
 }
-function* signUp() {
+function* signUp(action) {
   try {
-    yield delay(1000);
-
-    //  const result = yield call(logOutAPI);
+    const result = yield call(signUpAPI, action.data);
+    console.log(result);
     yield put({
       type: SIGN_UP_SUCCESS,
       //     data: result.data,
@@ -66,7 +66,6 @@ function* signUp() {
     });
   }
 }
-
 
 function followAPI() {
   return axios.post('/api/follow');
@@ -124,7 +123,6 @@ function* watchLogOut() {
 function* watchSignUp() {
   yield takeLatest(SIGN_UP_REQUEST, signUp);
 }
-
 
 function* watchFollow() {
   yield takeLatest(FOLLOW_REQUEST, follow);
