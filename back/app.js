@@ -1,11 +1,13 @@
 const express = require("express");
 const postRouter = require("./routes/post");
+const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const db = require("./models");
 const cors = require('cors');
 const app = express();
+const morgan = require('morgan');
 const passport = require('passport');
 const passportConfig = require('./passport')
 const dotenv = require('dotenv')
@@ -20,7 +22,8 @@ db.sequelize
  passportConfig();
 
 app.use(cors({
-  origin: '*'
+  origin: 'http://localhost:3000',
+  credentials: true,
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -32,23 +35,9 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(morgan('dev'));
 
-app.get("/", (req, res) => {
-  res.send("hello express");
-});
-
-app.get("/", (req, res) => {
-  res.send("get express");
-});
-
-app.get("/posts", (req, res) => {
-  res.json([
-    { id: 1, content: "hello" },
-    { id: 1, content: "hello2" },
-    { id: 1, content: "hello3" },
-  ]);
-});
-
+app.use("/posts", postsRouter);
 app.use("/post", postRouter);
 app.use('/user', userRouter);
 
