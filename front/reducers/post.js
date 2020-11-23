@@ -4,42 +4,42 @@ import faker from "faker";
 
 export const initialState = {
   mainPosts: [
-    {
-      id: 1,
-      User: {
-        id: 1,
-        nickname: "개밍두",
-      },
-      content: "첫번째 게시글 #해시태그 #익스프레스",
-      Images: [
-        {
-          src:
-            "https://i.pinimg.com/originals/8b/10/30/8b1030d543debb94705830c14f005893.jpg",
-        },
-        {
-          src:
-            "https://i.pinimg.com/originals/d3/f2/e6/d3f2e6f4da4bfc47a96a0e8aae1fffd4.jpg",
-        },
-        {
-          src:
-            "https://i.pinimg.com/originals/84/7f/1b/847f1b9a5d591cdc4a7855e4479de128.jpg",
-        },
-      ],
-      Comments: [
-        {
-          User: {
-            nickname: "nero",
-          },
-          content: "사랑해요",
-        },
-        {
-          User: {
-            nickname: "niro",
-          },
-          content: "대박이에요",
-        },
-      ],
-    },
+    // {
+    //   id: 1,
+    //   User: {
+    //     id: 1,
+    //     nickname: "개밍두",
+    //   },
+    //   content: "첫번째 게시글 #해시태그 #익스프레스",
+    //   Images: [
+    //     {
+    //       src:
+    //         "https://i.pinimg.com/originals/8b/10/30/8b1030d543debb94705830c14f005893.jpg",
+    //     },
+    //     {
+    //       src:
+    //         "https://i.pinimg.com/originals/d3/f2/e6/d3f2e6f4da4bfc47a96a0e8aae1fffd4.jpg",
+    //     },
+    //     {
+    //       src:
+    //         "https://i.pinimg.com/originals/84/7f/1b/847f1b9a5d591cdc4a7855e4479de128.jpg",
+    //     },
+    //   ],
+    //   Comments: [
+    //     {
+    //       User: {
+    //         nickname: "nero",
+    //       },
+    //       content: "사랑해요",
+    //     },
+    //     {
+    //       User: {
+    //         nickname: "niro",
+    //       },
+    //       content: "대박이에요",
+    //     },
+    //   ],
+    // },
   ],
   imagePaths: [],
   hasMorePost: true,
@@ -58,9 +58,15 @@ export const initialState = {
   removePostLoading: false,
   removePostDone: false,
   removePostError: null,
+  uploadImagesLoading: false,
+  uploadImagesDone: false,
+  uploadImagesError: null,
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  retweetLoading: false,
+  retweetDone: false,
+  retweetError: null,
 };
 
 export const generateDummyPost = (number) =>
@@ -113,6 +119,16 @@ export const UNLIKE_POST_REQUEST = "UNLIKE_POST_REQUEST";
 export const UNLIKE_POST_SUCCESS = "UNLIKE_POST_SUCCESS";
 export const UNLIKE_POST_FAILURE = "UNLIKE_POST_FAILURE";
 
+export const UPLOAD_IMAGES_REQUEST = "UPLOAD_IMAGES_REQUEST";
+export const UPLOAD_IMAGES_SUCCESS = "UPLOAD_IMAGES_SUCCESS";
+export const UPLOAD_IMAGES_FAILURE = "UPLOAD_IMAGES_FAILURE";
+
+export const RETWEET_REQUEST = "RETWEET_REQUEST";
+export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
+export const RETWEET_FAILURE = "RETWEET_FAILURE";
+
+export const REMOVE_IMAGE = "REMOVE_IMAGE";
+
 export const addPost = (data) => ({
   type: ADD_POST_REQUEST,
   data,
@@ -147,6 +163,37 @@ const dummyComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case UPLOAD_IMAGES_REQUEST:
+        draft.uploadImagesLoading = true;
+        draft.uploadImagesDone = false;
+        draft.uploadImagesError = null;
+        break;
+      case UPLOAD_IMAGES_SUCCESS: {
+        draft.imagePaths = action.data;
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesDone = true;
+        break;
+      }
+      case UPLOAD_IMAGES_FAILURE:
+        draft.uploadImagesLoading = false;
+        draft.uploadImagesError = action.error;
+        break;
+      case RETWEET_REQUEST:
+        draft.retweetLoading = true;
+        draft.retweetDone = false;
+        draft.retweetError = null;
+        break;
+      case RETWEET_SUCCESS: {
+        draft.retweetLoading = false;
+        draft.retweetDone = true;
+        draft.mainPosts.unshift(action.data);
+        break;
+      }
+      case RETWEET_FAILURE:
+        draft.retweetLoading = false;
+        draft.retweetError = action.error;
+        console.error(action.error);
+        break;
       case LIKE_POST_REQUEST:
         draft.likePostLoading = true;
         draft.likePostDone = false;
@@ -185,10 +232,10 @@ const reducer = (state = initialState, action) => {
         draft.loadPostsError = null;
         break;
       case LOAD_POST_SUCCESS:
-        draft.hasMorePost = draft.mainPosts.length < 50;
-        draft.mainPosts = action.data.concat(draft.mainPosts);
         draft.loadPostsLoading = false;
         draft.loadPostsDone = true;
+        draft.mainPosts = draft.mainPosts.concat(action.data);
+        draft.hasMorePost = action.data.length === 10;
         break;
       case LOAD_POST_FAILURE:
         draft.loadPostsLoading = false;
@@ -203,6 +250,7 @@ const reducer = (state = initialState, action) => {
         draft.addPostLoading = false;
         draft.addPostDone = true;
         draft.mainPosts.unshift(action.data);
+        draft.imagePaths = [];
         break;
       case ADD_POST_FAILURE:
         draft.addPostLoading = false;
@@ -216,7 +264,9 @@ const reducer = (state = initialState, action) => {
       case REMOVE_POST_SUCCESS:
         draft.removePostLoading = false;
         draft.removePostDone = true;
-        draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data.PostId);
+        draft.mainPosts = draft.mainPosts.filter(
+          (v) => v.id !== action.data.PostId
+        );
         break;
       case REMOVE_POST_FAILURE:
         draft.removePostLoading = false;
@@ -237,6 +287,9 @@ const reducer = (state = initialState, action) => {
       case ADD_COMMENT_FAILURE:
         draft.addCommentLoading = false;
         draft.addCommentError = action.error;
+        break;
+      case REMOVE_IMAGE:
+        draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
         break;
       default:
         break;
