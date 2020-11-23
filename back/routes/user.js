@@ -1,11 +1,12 @@
 const express = require("express");
 const passport = require("passport");
 const bcrypt = require("bcrypt");
-const { User, Post } = require("../models");
+const { User, Post, Comment, Image } = require("../models");
 const router = express.Router();
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
 
 router.get("/", async (req, res, next) => {
+  console.log(req.headers);
   try {
     if (req.user) {
       const fullUserWithoutPassword = await User.findOne({
@@ -39,6 +40,8 @@ router.get("/", async (req, res, next) => {
     next(error);
   }
 });
+
+
 
 router.post("/login", isNotLoggedIn, (req, res, next) => {
   passport.authenticate("local", (err, user, info) => {
@@ -151,7 +154,9 @@ router.get('/followers', isLoggedIn, async (req, res, next) => { // GET /user/fo
     const user = await User.findOne({
       where: { id: req.user.id }
     });
-   const followers = await user.getFollowers(req.user.id);
+   const followers = await user.getFollowers({
+     limit: 3,
+   });
     res.status(200).json(followers);
   } catch(error) {
     console.error(error);
@@ -165,13 +170,55 @@ router.get('/followings', isLoggedIn, async (req, res, next) => { // GET /user/f
     const user = await User.findOne({
       where: { id: req.user.id }
     });
-   const followings = await user.getFollowings();
+   const followings = await user.getFollowings({
+     limit: 3,
+   });
     res.status(200).json(followings);
   } catch(error) {
     console.error(error);
     next(error);    
   }
 })
+
+router.get("/:userId", async (req, res, next) => {
+  try {
+      const fullUserWithoutPassword = await User.findOne({
+        where: { id: req.param.userId },
+        attributes: {
+          exclude: ["password"],
+        },
+        include: [
+          {
+            model: Post,
+            attributes: ['id'],
+          },
+          {
+            model: User,
+            as: "Followings",
+            attributes: ['id'],
+          },
+          {
+            model: User,
+            as: "Followers",
+            attributes: ['id'],
+          },
+        ],
+      });
+      if (fullUserWithoutPassword) {
+        const data = fullUserWithoutPassword.toJSON();
+        data.Posts = data.Posts.length;
+        data.Followers = data.Followers.length;
+        data.Followings = data.Followings.length;
+      res.status(200).json(data);
+      } else {
+        res.status(404).json('존재하지 않는 사용자입니다.');
+      }
+      
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+});
 
 router.post("/", isNotLoggedIn, async (req, res, next) => {
   try {
@@ -196,11 +243,68 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
   }
 });
 
+router.get('/:userId/posts', async (req, res, next) => {
+  // GET /posts
+  try {
+    const where = { UserId: req.params.userId };
+    if (parseInt(req.query.lastId, 10)) {
+      where.id =  {
+        [Op.lt]: parseInt(req.query.lastId, 10)
+      }
+    }
+    const posts = await Post.findAll({
+      where,
+      limit: 10,
+      order: [
+        ["createdAt", "DESC"],
+        [Comment, "createdAt", "DESC"],
+      ],
+      include: [
+        {
+          model: User,
+          attributes: ["id", "nickname"],
+        },
+        {
+          model: Image,
+        },
+        {
+          model: Comment,
+          include: [{
+              model: User,
+              attributes: ["id", "nickname"],
+              order: [["createdAt", "DESC"]],
+            }],
+        }, {
+          model: User,
+          as: "Likers",
+          attributes: ['id'],
+        }, {
+          model: Post,
+          as: 'Retweet',
+          include: [{
+            model: User,
+            attributes: ['id', 'nickname'],
+          }, {
+            model: Image,
+          }]
+        }, ],
+    });
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+});
+
+
+
 router.post("/logout", isLoggedIn, (req, res) => {
   req.logOut();
   req.session.destroy();
   res.send("OK!");
 });
+
+
 
 
 

@@ -2,6 +2,7 @@ const express = require("express");
 const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
+const hashTagRouter = require("./routes/hashtag")
 const session = require('express-session');
 const cookieParser = require('cookie-parser')
 const db = require("./models");
@@ -42,7 +43,7 @@ app.use(morgan('dev'));
 app.use("/posts", postsRouter);
 app.use("/post", postRouter);
 app.use('/user', userRouter);
-
+app.use('/hastag', hashTagRouter);
 
 app.listen(3065, () => {
   console.log("서버 실행중!!");

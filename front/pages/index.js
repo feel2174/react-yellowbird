@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { END } from 'redux-saga';
+import Axios from "axios";
 import AppLayout from "./components/AppLayout";
 import PostForm from "./components/PostForm/PostForm";
 import PostCard from "./components/PostForm/PostCard";
-import { LOAD_POST_REQUEST } from "../reducers/post";
+import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_MY_INFO_REQUEST } from "../reducers/user";
 import wrapper from "../store/configureStore";
 
@@ -33,7 +34,7 @@ const Home = () => {
         if (hasMorePost && !loadPostsLoading) {
           const lastId = mainPosts[mainPosts.length - 1]?.id;
           dispatch({
-            type: LOAD_POST_REQUEST,
+            type: LOAD_POSTS_REQUEST,
             lastId,
           });
         }
@@ -56,11 +57,16 @@ const Home = () => {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
+  const cookie = context.req ? context.req.headers.cookie : '';
+  Axios.defaults.headers.Cookie = '';
+  if (context.req && cookie) {
+    Axios.defaults.headers.Cookie = cookie;
+  }
   context.store.dispatch({
     type: LOAD_MY_INFO_REQUEST,
   });
   context.store.dispatch({
-    type: LOAD_POST_REQUEST,
+    type: LOAD_POSTS_REQUEST,
   });
   context.store.dispatch(END);
   await context.store.sagaTask.toPromise();

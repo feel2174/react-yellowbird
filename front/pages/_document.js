@@ -3,15 +3,26 @@ import Document, { Head, Main, NextScript, Html } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 
 export default class MyDocument extends Document {
-  static getInitialProps({ renderPage }) {
-    // Step 1: Create an instance of ServerStyleSheet
+  static async getInitialProps(context) {
     const sheet = new ServerStyleSheet();
-    // Step 2: Retrieve styles from components in the page
-    const page = renderPage((App) => (props) => sheet.collectStyles(<App {...props} />));
-    // Step 3: Extract the styles as <style> tags
-    const styleTags = sheet.getStyleElement();
-    // Step 4: Pass styleTags as a prop
-    return { ...page, styleTags };
+    const originalRenderPage = context.renderPage;
+    try {
+      context.renderPage = () => originalRenderPage({
+        enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
+      });
+      const initialProps = await Document.getInitialProps(context);
+      return {
+        ...initialProps,
+        styles: (
+          <>
+            {initialProps.styles}
+            {sheet.getStyleElement()}
+          </>
+        ),
+      };
+    } finally {
+      sheet.seal();
+    }
   }
 
   render() {
@@ -25,6 +36,7 @@ export default class MyDocument extends Document {
         </Head>
         <body>
           <Main />
+          <script src="https://polyfill.io/v3/polyfill.min.js?features=es6,es7,es8,es9,NodeList.prototype.forEach&flags=gated" />
           <NextScript />
         </body>
       </Html>
