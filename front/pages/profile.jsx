@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { END } from 'redux-saga';
+import { END } from "redux-saga";
 import Axios from "axios";
 import Head from "next/head";
 import Router from "next/router";
-import useSWR from 'swr';
-import AppLayout from "./components/AppLayout";
-import NicknameEditForm from "./components/NicknameEditForm";
-import FollowList from "./components/FollowList";
+import useSWR from "swr";
+import AppLayout from "../components/AppLayout";
+import NicknameEditForm from "../components/NicknameEditForm";
+import FollowList from "../components/FollowList";
 import {
   LOAD_FOLLOWERS_REQUEST,
   LOAD_FOLLOWINGS_REQUEST,
@@ -21,8 +21,14 @@ const Profile = (props) => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
 
-  const { data: followersData, error: followerError } = useSWR('http://localhost:3065/user/followers', fetcher);
-  const { data: followingsData, error: followingError } = useSWR('http://localhost:3065/user/followings', fetcher);
+  const { data: followersData, error: followerError } = useSWR(
+    "http://localhost:3065/user/followers",
+    fetcher
+  );
+  const { data: followingsData, error: followingError } = useSWR(
+    "http://localhost:3065/user/followings",
+    fetcher
+  );
 
   useEffect(() => {
     dispatch({
@@ -41,11 +47,11 @@ const Profile = (props) => {
 
   if (followerError || followingError) {
     console.error(followerError || followingError);
-    return <div>팔로잉/팔로워 로딩중 에러가 발생했습니다.</div>
-    }
+    return <div>팔로잉/팔로워 로딩중 에러가 발생했습니다.</div>;
+  }
 
   if (!me) {
-    return '내 정보 로딩중...';
+    return "내 정보 로딩중...";
   }
   return (
     <>
@@ -62,17 +68,19 @@ const Profile = (props) => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  const cookie = context.req ? context.req.headers.cookie : '';
-  Axios.defaults.headers.Cookie = '';
-  if (context.req && cookie) {
-    Axios.defaults.headers.Cookie = cookie;
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    Axios.defaults.headers.Cookie = "";
+    if (context.req && cookie) {
+      Axios.defaults.headers.Cookie = cookie;
+    }
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
   }
-  context.store.dispatch({
-    type: LOAD_MY_INFO_REQUEST,
-  });
-  context.store.dispatch(END);
-  await context.store.sagaTask.toPromise();
-});
+);
 
 export default Profile;

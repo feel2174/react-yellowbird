@@ -6,11 +6,10 @@ import { Form, Input, Checkbox, Button } from "antd";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import Router from "next/router";
-import useInput from "./hooks/useInput";
+import useInput from "../hooks/useInput";
 import { SIGN_UP_REQUEST, LOAD_MY_INFO_REQUEST } from "../reducers/user";
-import AppLayout from "./components/AppLayout";
+import AppLayout from "../components/AppLayout";
 import wrapper from "../store/configureStore";
-import { LOAD_POST_REQUEST } from "../reducers/post";
 
 const ErrorMessage = styled.div`
   color: red;

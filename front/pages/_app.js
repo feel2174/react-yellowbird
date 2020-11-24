@@ -33,7 +33,7 @@ const NodeBird = ({ Component }) => (
           style={{ color: "#00acee", fontSize: "48px", padding: "10px" }}
         />
         NodeBird
-        <Tooltip title="깃허브로 이동합니다." >
+        <Tooltip title="깃허브로 이동합니다.">
           <a
             href="https://github.com/feel2174"
             target="_blank"
