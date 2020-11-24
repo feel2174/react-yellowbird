@@ -137,7 +137,7 @@ router.get("/:postId", async (req, res, next) => { //GET /post/1
     },{
        model: Image,
      }, {
-       modle: Comment,
+       model: Comment,
        include: [{
          model: User,
          attributes: ['id', 'nickname'],
@@ -200,7 +200,7 @@ router.post("/:postId/retweet", isLoggedIn, async (req, res) => {
      }, {
        model: Image,
      }, {
-       modle: Comment,
+       model: Comment,
        include: [{
          model: User,
          attributes: ['id', 'nickname'],
