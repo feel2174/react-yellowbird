@@ -1,4 +1,5 @@
 react-nodebird.pem
 node_modules/
+.vscode/
 .env
 .next
