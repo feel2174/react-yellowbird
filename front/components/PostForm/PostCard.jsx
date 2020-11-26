@@ -29,7 +29,7 @@ const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
   const id = useSelector((state) => state.user.me && state.user.me.id);
   const liked = post.Likers.find((v) => v.id === id);
-  console.log(`liker: ${liked}`);
+
   const onLike = useCallback(() => {
     dispatch({
       type: LIKE_POST_REQUEST,

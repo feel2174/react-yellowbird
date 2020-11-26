@@ -37,12 +37,11 @@ import {
 } from "../reducers/user";
 
 function loadMyInfoAPI() {
-  return axios.get('/user');
+  return axios.get("/user");
 }
 
 function* loadMyInfo(action) {
   try {
-    console.log("saga start");
     const result = yield call(loadMyInfoAPI, action.data);
     console.log("log");
     yield put({
@@ -64,9 +63,8 @@ function loadUserAPI(data) {
 
 function* loadUser(action) {
   try {
-    console.log("saga start");
     const result = yield call(loadUserAPI, action.data);
-    console.log("log");
+
     yield put({
       type: LOAD_USER_SUCCESS,
       data: result.data,
@@ -86,7 +84,6 @@ function logInAPI(data) {
 
 function* logIn(action) {
   try {
-    console.log("saga start");
     const result = yield call(logInAPI, action.data);
     console.log("log");
     yield put({
@@ -193,7 +190,7 @@ function* changeNickname(action) {
 }
 
 function loadFollowersAPI(data) {
-  return axios.get('/user/followers', data);
+  return axios.get("/user/followers", data);
 }
 function* loadFollowers(action) {
   try {
@@ -210,7 +207,7 @@ function* loadFollowers(action) {
   }
 }
 function loadFollowingsAPI(data) {
-  return axios.get('/user/followings', data);
+  return axios.get("/user/followings", data);
 }
 function* loadFollowings(action) {
   try {
@@ -247,12 +244,10 @@ function* removeFollower(action) {
 }
 
 function* watchLoadMyInfo() {
-  console.log("watchLoadMyInfo");
   yield takeLatest(LOAD_MY_INFO_REQUEST, loadMyInfo);
 }
 
 function* watchLoadUser() {
-  console.log("watchLoadMyInfo");
   yield takeLatest(LOAD_USER_REQUEST, loadUser);
 }
 

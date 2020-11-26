@@ -155,25 +155,25 @@ export const addComment = (data) => ({
   data,
 });
 
-const dummyPost = (data) => ({
-  id: data.id,
-  content: data.content,
-  User: {
-    id: 1,
-    nickname: "devzucca",
-  },
-  Images: [],
-  Comments: [],
-});
+// const dummyPost = (data) => ({
+//   id: data.id,
+//   content: data.content,
+//   User: {
+//     id: 1,
+//     nickname: "devzucca",
+//   },
+//   Images: [],
+//   Comments: [],
+// });
 
-const dummyComment = (data) => ({
-  id: shortId.generate(),
-  content: data,
-  User: {
-    id: 1,
-    nickname: "devzucca",
-  },
-});
+// const dummyComment = (data) => ({
+//   id: shortId.generate(),
+//   content: data,
+//   User: {
+//     id: 1,
+//     nickname: "devzucca",
+//   },
+// });
 
 // 이전 상태를 액션을 통해 다음상태로 만들어내는 함수 (불변성!!)
 const reducer = (state = initialState, action) => {
@@ -301,7 +301,7 @@ const reducer = (state = initialState, action) => {
         draft.removePostLoading = false;
         draft.removePostDone = true;
         draft.mainPosts = draft.mainPosts.filter(
-          (v) => v.id !== action.data.PostId
+          (v) => v.id !== action.data.PostId,
         );
         break;
       case REMOVE_POST_FAILURE:

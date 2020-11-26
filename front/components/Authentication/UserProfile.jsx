@@ -12,24 +12,25 @@ const UserProfile = () => {
   }, []);
   return (
     <Card
+      style={{ marginTop: "20px", marginLeft: "20px", padding: "5px" }}
       actions={[
         <div key="twit">
           <Link href="/">
-            <a>트윗</a>
+            <a>Tweet</a>
           </Link>
           <br />
           {me.Posts.length}
         </div>,
         <div key="follwings">
           <Link href="/profile">
-            <a>팔로잉</a>
+            <a>Following</a>
           </Link>
           <br />
           {me.Followings.length}
         </div>,
         <div key="followers">
           <Link href="/profile">
-            <a>팔로워</a>
+            <a>Follower</a>
           </Link>
           <br />
           {me.Followers.length}

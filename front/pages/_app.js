@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 import Head from "next/head";
 import "antd/dist/antd.css";
@@ -18,48 +18,58 @@ const HeaderTextFont = styled.div`
   padding: 10px;
 `;
 const Header = styled.header`
+  width: 100%;
   background-color: yellow;
+
 `;
 
-const NodeBird = ({ Component }) => (
-  <>
-    <Head>
-      <meta charSet="utf-8" />
-      <title>NodeBird</title>
-    </Head>
-    <Header>
-      <HeaderTextFont>
-        <TwitterOutlined
-          style={{ color: "#00acee", fontSize: "48px", padding: "10px" }}
-        />
-        NodeBird
-        <Tooltip title="깃허브로 이동합니다.">
-          <a
-            href="https://github.com/feel2174"
-            target="_blank"
-            rel="noreferrer noopener"
-            style={{ color: "black", padding: "20px", float: "right" }}
-          >
-            <GithubOutlined />
-          </a>
-        </Tooltip>
-        <Tooltip title="인스타그램으로 이동합니다.">
-          <a
-            href="https://www.instagram.com/lord_0814/"
-            target="_blank"
-            rel="noreferrer noopener"
-            style={{ color: "black", padding: "20px", float: "right" }}
-          >
-            <InstagramOutlined />
-          </a>
-        </Tooltip>
-      </HeaderTextFont>
-    </Header>
-    <Component />
-  </>
-);
+
+const Atag = styled.a`
+  color: black;
+  padding: 20px;
+  float: right;
+`;
+
+const NodeBird = ({ Component }) => {
+  return (
+    <>
+      <Head>
+        <meta charSet="utf-8" />
+        <title>NodeBird</title>
+      </Head>
+      <Header>
+        <HeaderTextFont>
+          <TwitterOutlined
+            style={{ color: "#00acee", fontSize: "48px", padding: "10px" }}
+          />
+          YellowBird
+          <Tooltip title="깃허브로 이동합니다.">
+            <Atag
+              href="https://github.com/feel2174"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <GithubOutlined />
+            </Atag>
+          </Tooltip>
+          <Tooltip title="인스타그램으로 이동합니다.">
+            <Atag
+              href="https://www.instagram.com/lord_0814/"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              <InstagramOutlined />
+            </Atag>
+          </Tooltip>
+        </HeaderTextFont>
+      </Header>
+     
+      <Component />
+    </>
+  );
+};
 
 NodeBird.propTypes = {
   Component: PropTypes.elementType.isRequired,
 };
-export default wrapper.withRedux((NodeBird));
+export default wrapper.withRedux(NodeBird);

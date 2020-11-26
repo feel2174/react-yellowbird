@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from "react";
 import Head from "next/head";
-import { END } from 'redux-saga';
+import { END } from "redux-saga";
 import Axios from "axios";
 import { Form, Input, Checkbox, Button } from "antd";
 import styled from "styled-components";
@@ -15,10 +15,15 @@ const ErrorMessage = styled.div`
   color: red;
 `;
 
+const SignUpLabel = styled.label`
+  margin-bottom: 2rem;
+`;
+
 const Signup = () => {
   const dispatch = useDispatch();
   const { signUpLoading, signUpDone, signUpError, me } = useSelector(
-    (state) => state.user);
+    (state) => state.user
+  );
   const [email, onChangeEmail] = useInput("");
   const [password, onChangePassword] = useInput("");
   const [nickname, onChangeNickname] = useInput("");
@@ -34,8 +39,8 @@ const Signup = () => {
   }, [signUpDone]);
 
   useEffect(() => {
-    if ((me && me.id)) {
-      Router.replace('/');
+    if (me && me.id) {
+      Router.replace("/");
     }
   }, [me && me.id]);
 
@@ -77,8 +82,25 @@ const Signup = () => {
         <meta charSet="utf-8" />
         <title>회원가입 | NodeBird</title>
       </Head>
-      <Form onFinish={onSubmit}>
-        <div>
+      <Form
+        style={{
+          marginTop: "20px",
+          padding: "5px",
+        }}
+        onFinish={onSubmit}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            fontSize: "1.5rem",
+            color: "white",
+            background: "#008ad3",
+          }}
+        >
+          회원가입
+        </div>
+        <div style={{ marginTop: "5px" }}>
           <label htmlFor="user-email">이메일</label>
           <br />
           <Input
@@ -89,8 +111,8 @@ const Signup = () => {
             onChange={onChangeEmail}
           />
         </div>
-        <div>
-          <label htmlFor="user-nick">닉네임</label>
+        <div style={{ marginTop: '5px' }}>
+          <SignUpLabel htmlFor="user-nick">닉네임</SignUpLabel>
           <br />
           <Input
             name="user-nick"
@@ -99,24 +121,28 @@ const Signup = () => {
             onChange={onChangeNickname}
           />
         </div>
-        <div>
-          <label htmlFor="user-password">비밀번호</label>
+        <div style={{ marginTop: '5px' }}>
+          <SignUpLabel htmlFor="user-password">비밀번호</SignUpLabel>
           <br />
           <Input
             name="user-password"
             type="password"
+            placeholder="비밀번호를 입력해주세요."
             value={password}
             required
             onChange={onChangePassword}
           />
         </div>
-        <Input
-          name="user-password-check"
-          type="password"
-          value={passwordCheck}
-          required
-          onChange={onChangePasswordCheck}
-        />
+        <div style={{ marginTop: '5px' }}>
+          <Input
+            name="user-password-check"
+            type="password"
+            placeholder="비밀번호를 한번 더 입력해주세요."
+            value={passwordCheck}
+            required
+            onChange={onChangePasswordCheck}
+          />
+        </div>
         {passwordError && (
           <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
         )}
@@ -137,19 +163,21 @@ const Signup = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(async (context) => {
-  const cookie = context.req ? context.req.headers.cookie : '';
-  Axios.defaults.headers.Cookie = '';
-  if (context.req && cookie) {
-    Axios.defaults.headers.Cookie = cookie;
-  }
-  context.store.dispatch({
-    type: LOAD_MY_INFO_REQUEST,
-  });
+export const getServerSideProps = wrapper.getServerSideProps(
+  async (context) => {
+    const cookie = context.req ? context.req.headers.cookie : "";
+    Axios.defaults.headers.Cookie = "";
+    if (context.req && cookie) {
+      Axios.defaults.headers.Cookie = cookie;
+    }
+    context.store.dispatch({
+      type: LOAD_MY_INFO_REQUEST,
+    });
 
-  context.store.dispatch(END);
-  await context.store.sagaTask.toPromise();
-});
+    context.store.dispatch(END);
+    await context.store.sagaTask.toPromise();
+  }
+);
 
 export default Signup;
 

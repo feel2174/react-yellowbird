@@ -3,12 +3,14 @@ import { Form, Input, Button } from "antd";
 import Link from "next/link";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-
-import useInput from '../../hooks/useInput';
 import { LOG_IN_REQUEST } from "../../reducers/user";
+import useInput from "../../hooks/useInput";
 
 const ButtonWrapper = styled.div`
   margin-top: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 5px;
 `;
 
 const LoginForm = () => {
@@ -32,9 +34,23 @@ const LoginForm = () => {
   }, [email, password]);
 
   return (
-    <Form style={{ padding: "10px" }} onFinish={onSubmitForm}>
-      <div>
-        <label htmlFor="user-email">이메일</label>
+    <Form
+      style={{ marginTop: "20px", marginLeft: '20px', border: '1px solid grey', borderRadius: '5px!important' }}
+      onFinish={onSubmitForm}
+    >
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          fontSize: '1.5rem',
+          color: 'white',
+          background: '#006FFF',
+        }}
+      >
+        Sign In
+      </div>
+      <div style={{ padding: '10px' }}>
+        <label style={{ color: 'grey' }} htmlFor="user-email">Email</label>
         <br />
         <Input
           name="user-email"
@@ -43,7 +59,7 @@ const LoginForm = () => {
           onChange={onChangeEmail}
           required
         />
-        <label htmlFor="user-password">비밀번호</label>
+        <label style={{ color: 'grey' }} htmlFor="user-password">Password</label>
         <br />
         <Input
           name="user-password"

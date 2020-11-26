@@ -17,17 +17,17 @@ import wrapper from "../store/configureStore";
 
 const fetcher = (url) => Axios.get(url, { withCredentials: true }).then((result) => result.data);
 
-const Profile = (props) => {
+const Profile = () => {
   const dispatch = useDispatch();
   const { me } = useSelector((state) => state.user);
 
   const { data: followersData, error: followerError } = useSWR(
     "http://localhost:3065/user/followers",
-    fetcher
+    fetcher,
   );
   const { data: followingsData, error: followingError } = useSWR(
     "http://localhost:3065/user/followings",
-    fetcher
+    fetcher,
   );
 
   useEffect(() => {

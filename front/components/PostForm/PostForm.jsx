@@ -22,7 +22,7 @@ const PostForm = () => {
 
   const onSubmitForm = useCallback(() => {
     if (!text || !text.trim()) {
-      return alert('게시글을 작성하세요.');
+      return alert("게시글을 작성하세요.");
     }
     console.log("clicked~");
     const formData = new FormData();
@@ -64,11 +64,12 @@ const PostForm = () => {
 
   return (
     <Form
-      style={{ margin: "10px 0 20px" }}
+      style={{ margin: "20px 0 20px" }}
       encType="multipart/form-data"
       onFinish={onSubmitForm}
     >
       <Input.TextArea
+        style={{ height: "6rem", marginBottom: '10px'}}
         value={text}
         onChange={onChangeText}
         maxLength={140}

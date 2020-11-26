@@ -2,7 +2,6 @@ import {
   all,
   fork,
   put,
-  delay,
   takeLatest,
   throttle,
   call,
