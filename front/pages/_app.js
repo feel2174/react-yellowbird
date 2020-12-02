@@ -9,6 +9,7 @@ import {
 } from "@ant-design/icons";
 import styled from "styled-components";
 import { Tooltip } from "antd";
+import Link from "next/link";
 import wrapper from "../store/configureStore";
 
 const HeaderTextFont = styled.div`
@@ -18,11 +19,12 @@ const HeaderTextFont = styled.div`
   padding: 10px;
 `;
 const Header = styled.header`
+  position: sticky;
+  top: 0;
+  z-index: 100;
   width: 100%;
   background-color: yellow;
-
 `;
-
 
 const Atag = styled.a`
   color: black;
@@ -39,9 +41,13 @@ const NodeBird = ({ Component }) => {
       </Head>
       <Header>
         <HeaderTextFont>
-          <TwitterOutlined
-            style={{ color: "#00acee", fontSize: "48px", padding: "10px" }}
-          />
+          <Link href="/">
+            <a>
+              <TwitterOutlined
+                style={{ color: "#00acee", fontSize: "48px", padding: "10px" }}
+              />
+            </a>
+          </Link>
           YellowBird
           <Tooltip title="깃허브로 이동합니다.">
             <Atag
@@ -63,7 +69,6 @@ const NodeBird = ({ Component }) => {
           </Tooltip>
         </HeaderTextFont>
       </Header>
-     
       <Component />
     </>
   );

@@ -1,15 +1,17 @@
 import React, { useState, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import PropTypes from "prop-types";
-import { Card, Popover, Button, Avatar, List, Comment } from "antd";
+import { Card, Popover, Button, Avatar, List, Comment, Dropdown } from "antd";
 import {
   RetweetOutlined,
   HeartOutlined,
   HeartTwoTone,
   MessageOutlined,
   EllipsisOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import moment from "moment";
+import Link from "next/link";
 import PostImages from "./PostImages";
 import CommentForm from "../CommentForm";
 import PostCardContent from "./PostCardContent";
@@ -20,6 +22,7 @@ import {
   RETWEET_REQUEST,
 } from "../../reducers/post";
 import FollowButton from "../FollowButton";
+import MenuButton from "../MenuButton";
 
 moment.locale("ko");
 
@@ -85,7 +88,7 @@ const PostCard = ({ post }) => {
               <Button.Group>
                 {id && post.User.id === id ? (
                   <>
-                    <Button>수정</Button>
+                    {!post.RetweetId && <Button>수정</Button>}
                     <Button
                       type="danger"
                       loading={removePostLoading}
@@ -128,11 +131,23 @@ const PostCard = ({ post }) => {
           </Card>
         ) : (
           <>
+            <Dropdown overlay={<MenuButton />}>
+              <a style={{ float: "right", paddingLeft: '10px' }}>
+                <DownOutlined />
+              </a>
+            </Dropdown>
             <div style={{ float: "right" }}>
               {moment(post.createdAt).format("YYYY.MM.DD")}
             </div>
+
             <Card.Meta
-              avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+              avatar={
+                <Link href={`/user/${post.User.id}`}>
+                  <a>
+                    <Avatar>{post.User.nickname[0]}</Avatar>
+                  </a>
+                </Link>
+              }
               title={post.User.nickname}
               description={<PostCardContent postData={post.content} />}
             />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef } from "react";
 import PropTypes from "prop-types";
 import Link from "next/link";
 import { Menu, Input, Row, Col } from "antd";
@@ -31,11 +31,11 @@ const Global = createGlobalStyle`
 
 const AppLayout = ({ children }) => {
   const { me } = useSelector((state) => state.user);
-
+  const searchRef = useRef();
   return (
     <div>
       <Global />
-      <Menu mode="horizontal">
+      <Menu mode="horizontal" style={{ display: 'flex', justifyContent: 'space-between' }}>
         <Menu.Item key="1">
           <Link href="/">
             <a>무슨 일이 일어나고 있나요?</a>
@@ -45,6 +45,9 @@ const AppLayout = ({ children }) => {
           <Link href="/profile">
             <a>프로필</a>
           </Link>
+        </Menu.Item>
+        <Menu.Item key="3">
+          <SearchInput ref={searchRef} />
         </Menu.Item>
       </Menu>
       <MainRow gutter={8}>
@@ -64,7 +67,7 @@ const AppLayout = ({ children }) => {
             href="https://zucca.tistory.com"
             target="_blank"
             rel="noreferrer noopener"
-            style={{ position: "fixed", padding: "20px" }}
+            style={{ bottom: '0', right: '0', position: "fixed", padding: "20px" }}
           >
             Made by devZucca
           </a>

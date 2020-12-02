@@ -1,6 +1,6 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import Link from 'next/link';
+import React from "react";
+import PropTypes from "prop-types";
+import Link from "next/link";
 
 const PostCardContent = ({ postData }) => (
   <div>
@@ -8,7 +8,8 @@ const PostCardContent = ({ postData }) => (
       if (v.match(/(#[^\s#]+)/)) {
         return (
           <Link
-            href={{ pathname: '/hashtag', query: { tag: v.slice(1) } }}
+            prefetch={false}
+            href={{ pathname: "/hashtag", query: { tag: v.slice(1) } }}
             as={`/hashtag/${v.slice(1)}`}
             key={v}
           >

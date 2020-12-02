@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const { User, Post, Comment, Image } = require("../models");
 const router = express.Router();
 const { isLoggedIn, isNotLoggedIn } = require("./middlewares");
+const { Op } = require('sequelize');
 
 router.get("/", async (req, res, next) => {
   console.log(req.headers);

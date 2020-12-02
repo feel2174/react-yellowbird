@@ -16,6 +16,9 @@ const CommentForm = ({ post }) => {
     }
   }, [addCommentDone]);
   const onSubmitComment = useCallback(() => {
+    if (id == null) {
+      alert('로그인이 필요합니다.');
+    }
     dispatch({
       type: ADD_COMMENT_REQUEST,
       data: { content: commentText, postId: post.id, userId: id },

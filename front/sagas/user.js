@@ -1,4 +1,4 @@
-import { all, fork, put, delay, takeLatest, call } from "redux-saga/effects";
+import { all, fork, put, takeLatest, call } from "redux-saga/effects";
 import axios from "axios";
 import {
   LOG_IN_SUCCESS,
@@ -43,7 +43,7 @@ function loadMyInfoAPI() {
 function* loadMyInfo(action) {
   try {
     const result = yield call(loadMyInfoAPI, action.data);
-    console.log("log");
+
     yield put({
       type: LOAD_MY_INFO_SUCCESS,
       data: result.data,
@@ -85,7 +85,7 @@ function logInAPI(data) {
 function* logIn(action) {
   try {
     const result = yield call(logInAPI, action.data);
-    console.log("log");
+
     yield put({
       type: LOG_IN_SUCCESS,
       data: result.data,
@@ -122,7 +122,7 @@ function signUpAPI(data) {
 function* signUp(action) {
   try {
     const result = yield call(signUpAPI, action.data);
-    console.log(result);
+
     yield put({
       type: SIGN_UP_SUCCESS,
       //     data: result.data,
@@ -256,7 +256,6 @@ function* watchChangeNickname() {
 }
 
 function* watchLogin() {
-  console.log("watchLogin");
   yield takeLatest(LOG_IN_REQUEST, logIn);
 }
 
