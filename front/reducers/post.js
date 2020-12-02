@@ -68,6 +68,9 @@ export const initialState = {
   addCommentLoading: false,
   addCommentDone: false,
   addCommentError: null,
+  modifyPostLoading: false,
+  modifyPostDone: false,
+  modifyPostError: null,
   retweetLoading: false,
   retweetDone: false,
   retweetError: null,
@@ -143,6 +146,10 @@ export const RETWEET_REQUEST = "RETWEET_REQUEST";
 export const RETWEET_SUCCESS = "RETWEET_SUCCESS";
 export const RETWEET_FAILURE = "RETWEET_FAILURE";
 
+export const MODIFY_POST_REQUEST = "MODIFY_POST_REQUEST";
+export const MODIFY_POST_SUCCESS = "MODIFY_POST_SUCCESS";
+export const MODIFY_POST_FAILURE = "MODIFY_POST_FAILURE";
+
 export const REMOVE_IMAGE = "REMOVE_IMAGE";
 
 export const addPost = (data) => ({
@@ -179,6 +186,21 @@ export const addComment = (data) => ({
 const reducer = (state = initialState, action) => {
   return produce(state, (draft) => {
     switch (action.type) {
+      case MODIFY_POST_REQUEST:
+        draft.modifyPostLoading = true;
+        draft.modifyPostDone = false;
+        draft.modifyPostError = null;
+        break;
+      case MODIFY_POST_SUCCESS: {
+        draft.modifyPostLoading = false;
+        draft.modifyPostDone = true;
+        draft.mainPosts.find((v) => v.id === action.data.PostId).content = action.data.content;
+        break;
+      }
+      case MODIFY_POST_FAILURE:
+        draft.modifyPostLoading = false;
+        draft.modifyPostError = action.error;
+        break;
       case UPLOAD_IMAGES_REQUEST:
         draft.uploadImagesLoading = true;
         draft.uploadImagesDone = false;

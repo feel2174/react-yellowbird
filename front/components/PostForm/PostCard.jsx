@@ -20,6 +20,7 @@ import {
   LIKE_POST_REQUEST,
   UNLIKE_POST_REQUEST,
   RETWEET_REQUEST,
+  MODIFY_POST_REQUEST,
 } from "../../reducers/post";
 import FollowButton from "../FollowButton";
 import MenuButton from "../MenuButton";
@@ -30,6 +31,8 @@ const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const { removePostLoading } = useSelector((state) => state.post);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+
   const id = useSelector((state) => state.user.me && state.user.me.id);
   const liked = post.Likers.find((v) => v.id === id);
 
@@ -55,6 +58,25 @@ const PostCard = ({ post }) => {
       data: post.id,
     });
   }, []);
+
+  const onClickModify = useCallback(() => {
+    setEditMode(true);
+  }, [editMode]);
+
+  const onCancelModifyPost = useCallback(() => {
+    setEditMode(false);
+  }, [editMode]);
+
+  const onChangePost = useCallback(
+    (editText) => () => {
+      dispatch({
+        type: MODIFY_POST_REQUEST,
+        data: {
+          PostId: post.id,
+          content: editText,
+        },
+      });
+    }, [post]);
 
   const onRetweet = useCallback(() => {
     if (!id) {
@@ -88,7 +110,9 @@ const PostCard = ({ post }) => {
               <Button.Group>
                 {id && post.User.id === id ? (
                   <>
-                    {!post.RetweetId && <Button>수정</Button>}
+                    {!post.RetweetId && (
+                      <Button onClick={onClickModify}>수정</Button>
+                    )}
                     <Button
                       type="danger"
                       loading={removePostLoading}
@@ -126,13 +150,19 @@ const PostCard = ({ post }) => {
             <Card.Meta
               avatar={<Avatar>{post.Retweet.User.nickname[0]}</Avatar>}
               title={post.Retweet.User.nickname}
-              description={<PostCardContent postData={post.Retweet.content} />}
+              description={
+                <PostCardContent
+                  postData={post.Retweet.content}
+                  onCancelModifyPost={onCancelModifyPost}
+                  onChangePost={onChangePost}
+                />
+              }
             />
           </Card>
         ) : (
           <>
             <Dropdown overlay={<MenuButton />}>
-              <a style={{ float: "right", paddingLeft: '10px' }}>
+              <a style={{ float: "right", paddingLeft: "10px" }}>
                 <DownOutlined />
               </a>
             </Dropdown>
@@ -149,7 +179,14 @@ const PostCard = ({ post }) => {
                 </Link>
               }
               title={post.User.nickname}
-              description={<PostCardContent postData={post.content} />}
+              description={
+                <PostCardContent
+                  onCancelModifyPost={onCancelModifyPost}
+                  onChangePost={onChangePost}
+                  editMode={editMode}
+                  postData={post.content}
+                />
+              }
             />
           </>
         )}
