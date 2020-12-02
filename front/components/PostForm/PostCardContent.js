@@ -29,7 +29,7 @@ const PostCardContent = ({
     <div>
       {editMode ? (
         <>
-          <TextArea value={editText} onChange={onChangeText} />
+          <TextArea placeholder={postData} value={editText} onChange={onChangeText} />
           <Button.Group>
             <Button
               type="primary"
